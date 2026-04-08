@@ -1,0 +1,15 @@
+scene "Coffee Shop" {
+    "You walk into a coffee shop."
+    Barista: "Hello!"
+    You: "Hi, a coffee please."
+    Barista: "Nothing here. You need to go to the bar."
+    set places_went 1
+    goto "Bar"
+}
+scene "Bar" {
+    "You walk into a bar."
+    Barkeep: "Hey there."
+    You: "Hello..."
+    You: "I need a drink..."
+    end
+}
