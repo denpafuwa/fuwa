@@ -5,6 +5,7 @@ import flixel.FlxState;
 import flixel.group.FlxSpriteGroup;
 import flixel.text.FlxText;
 import flixel.ui.FlxButton;
+import fuwa.Fuwa;
 import fuwa.FuwaLexer;
 import fuwa.FuwaParser;
 import haxe.Json;
@@ -23,11 +24,7 @@ class PlayState extends FlxState
 
 	override public function create()
 	{
-		var tokens = FuwaLexer.tokenize(Assets.getText("assets/data/test.fuwa"));
-		var statements = FuwaParser.parse(tokens);
-		for (st in statements) {
-			trace (st);
-		}
+		var fuwa = new Fuwa(Assets.getText("assets/data/test.fuwa"), "Coffee Shop");
 		super.create();
 	}
 

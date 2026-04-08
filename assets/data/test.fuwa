@@ -3,8 +3,14 @@ scene "Coffee Shop" {
     Barista: "Hello!"
     You: "Hi, a coffee please."
     Barista: "Nothing here. You need to go to the bar."
-    set places_went 1
-    goto "Bar"
+    choice "Go to bar" {
+        set places_went 1
+        goto "Bar"
+    }
+    choice "Don't go to bar" {
+        You: "I'm okay here."
+    }
+    end
 }
 scene "Bar" {
     "You walk into a bar."

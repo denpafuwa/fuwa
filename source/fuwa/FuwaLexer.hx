@@ -15,6 +15,7 @@ class FuwaLexer {
 
     static final KEYWORDS:Map<String, FuwaTokenType> = [
         'scene' => KW_SCENE,
+		'choice' => KW_CHOICE,
         'goto' => KW_GOTO,
         'set' => KW_SET,
         'end' => KW_END

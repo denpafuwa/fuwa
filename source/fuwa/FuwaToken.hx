@@ -2,6 +2,7 @@ package fuwa;
 
 enum FuwaTokenType {
     KW_SCENE;
+	KW_CHOICE;
     KW_SET;
     KW_GOTO;
     KW_END;

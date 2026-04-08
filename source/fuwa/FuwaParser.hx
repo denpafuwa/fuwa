@@ -7,8 +7,8 @@ class FuwaParser {
     public static var tokens:Array<FuwaToken> = [];
     public static var statements:Array<FuwaStmt> = [];
 
-    public static function parse(Tokens:Array<FuwaToken>) {
-        trace(Tokens);
+	public static function parse(Tokens:Array<FuwaToken>)
+	{
         tokens = Tokens;
         var rawStatements:Array<FuwaStmt> = [];
         while (!isAtEnd()) {
@@ -49,19 +49,15 @@ class FuwaParser {
             case KW_SCENE:
                 if (peek(1) != null && peek(1).type == TK_STRING) {
                     advance();
-                    var sceneName = current().value;
-                    trace(sceneName);
-                    trace(peek(1));
+					var sceneName = current().value;
                     if (peek(1) != null && peek(1).type == TK_LBRACE) {
-                        var body:Array<FuwaStmt> = [];
-                        // trace(current(), 'lmaoze');
+						var body:Array<FuwaStmt> = [];
                         advance(); 
                         eatNewlines();
                         advance();
                         while (current() != null && current().type != TK_RBRACE && current().type != TK_EOF) {
                             eatNewlines();
-                            var x = getStatement();
-                            // trace(current(), 'you faggot', x);
+							var x = getStatement();
                             advance();
                             eatNewlines();
                             body.push(x);
@@ -71,13 +67,36 @@ class FuwaParser {
                     return null;
                 }
                 return null;
+			case KW_CHOICE:
+				if (peek(1) != null && peek(1).type == TK_STRING)
+				{
+					advance();
+					var text = current().value;
+					if (peek(1) != null && peek(1).type == TK_LBRACE)
+					{
+						var body:Array<FuwaStmt> = [];
+						advance();
+						eatNewlines();
+						advance();
+						while (current() != null && current().type != TK_RBRACE && current().type != TK_EOF)
+						{
+							eatNewlines();
+							var x = getStatement();
+							advance();
+							eatNewlines();
+							body.push(x);
+						}
+						return SChoice(text, body);
+					}
+					return null;
+				}
+				return null;
             case TK_STRING:
                     var line = SLine(null, current().value);
                     return line;
             case TK_IDENTIFIER:
                 if (peek(1) != null && peek(1).type == TK_COLON) {
-                    var name = current().value;
-                    // trace("LOL NAME", name);
+					var name = current().value;
                     advance();
                     if (peek(1) != null && peek(1).type == TK_STRING) {
                         advance();
