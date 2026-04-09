@@ -2,12 +2,12 @@ scene "Coffee Shop" {
     "You walk into a coffee shop."
     Barista: "Hello!"
     You: "Hi, a coffee please."
-    Barista: "Nothing here. You need to go to the bar."
+    Barista: "Nothing here. You need to go to the bar." // choices after this
     choice "Go to bar" {
         set test_variable 1
         "Are you sure?"
         choice "Yes, I want to" {
-            "Are you REALLY sure"
+            "Are you REALLY sure" // asdf
             choice "Yes" {
                 set test_variable 2
                 goto "Bar"

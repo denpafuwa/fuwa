@@ -9,6 +9,7 @@ enum FuwaTokenType {
 	KW_PREV;
 
     TK_IDENTIFIER;
+	TK_COMMENT;
     TK_COLON;
     TK_LBRACE;
     TK_RBRACE;

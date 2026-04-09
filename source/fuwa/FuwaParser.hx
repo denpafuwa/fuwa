@@ -111,6 +111,16 @@ class FuwaParser {
                     return null;
                 }
                 return null;
+			case TK_COMMENT:
+				var text:StringBuf = new StringBuf();
+				while (peek(1).type != TK_NEWLINE)
+				{
+					advance();
+					text.add(current().value);
+					text.add(" ");
+				}
+				return SComment(StringTools.trim(text.toString()));
+
             case _:
                 null;
         }

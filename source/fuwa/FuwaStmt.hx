@@ -7,6 +7,7 @@ enum FuwaStmt {
     SSet(varName:String, value:Dynamic);
     SGoto(sceneName:String);
 	SFunc(name:String, args:Array<Dynamic>);
+	SComment(text:String);
 	SPrev;
     SEnd;
 }

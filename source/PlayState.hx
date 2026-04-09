@@ -35,15 +35,13 @@ class PlayState extends FlxState
 
 	override public function create()
 	{
+		trace("Scenes:");
 		for (k => v in fuwa.scenes)
 		{
 			trace(k);
 		}
 
-		@:privateAccess
-		trace(fuwa.parentArr);
 		curDialogue = fuwa.run();
-		trace(curDialogue);
 		text = new FlxText(20, 20, FlxG.width - 40, dialogueText(curDialogue), 32);
 		add(text);
 		choices = new FlxTypedSpriteGroup<FlxText>(20, 120);
@@ -103,7 +101,6 @@ class PlayState extends FlxState
 	}
 	function doDialogue()
 	{
-		trace(curDialogue);
 		curDialogue = fuwa.run();
 		if (curDialogue == null)
 		{

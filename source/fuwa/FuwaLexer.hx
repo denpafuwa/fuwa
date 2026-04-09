@@ -57,6 +57,13 @@ class FuwaLexer {
 				token(TK_NEWLINE, '\n');
             case '"':
                 scanString();
+			case '/':
+				if (peek(1) == '/')
+				{
+					advance();
+					return token(TK_COMMENT, '//');
+				}
+				throw "Lexer: error parsing '/'";
             case ' ', '\t', '\r':
                 token(TK_WHITESPACE, current());
             case _:
@@ -65,7 +72,7 @@ class FuwaLexer {
                 } else if (isAlpha(current())) {
                     return scanIdentifier();
                 }
-                return null;
+				throw "Lexer: unidentified characters";
         }
     }
 

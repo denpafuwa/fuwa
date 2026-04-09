@@ -63,7 +63,7 @@ class Fuwa {
 
 	public function setScene(name:String)
 	{
-		curBlock = scenes.get(name);
+		setCurBlock(scenes.get(name));
 		idx = 0;
 		curStmt = curBlock[idx];
 		parentArr = [];
@@ -99,6 +99,8 @@ class Fuwa {
 			}
 		}
 	}
+
+	function removeComments() {}
 
 	function getStmtName(st:FuwaStmt)
 	{
@@ -160,12 +162,24 @@ class Fuwa {
 			idx: idx,
 			body: cast selChoice.event.body
 		});
-		curBlock = cast selChoice.event.body;
+		setCurBlock(cast selChoice.event.body);
 		idx = 0;
 		curStmt = curBlock[idx];
 		if (curBlock[idx].getName() == 'SPrev')
 		{
 			run(); // stupid fix
+		}
+	}
+
+	function setCurBlock(block:Array<FuwaStmt>)
+	{
+		curBlock = block;
+		for (i in 0...curBlock.copy().length)
+		{
+			if (curBlock[i] == null || curBlock[i].getName() == 'SComment')
+			{
+				curBlock.remove(curBlock[i]);
+			}
 		}
 	}
 
@@ -177,7 +191,6 @@ class Fuwa {
 		{
 			return null;
 		}
-
 		var ret:FuwaEvent = null;
 
 		if (curStmt.getName() == 'SLine')
@@ -218,7 +231,7 @@ class Fuwa {
 		{
 			parentArr.shift();
 			var parent = parentArr.shift();
-			curBlock = parent.body;
+			setCurBlock(parent.body);
 			idx = parent.idx;
 			ret = {
 				name: getStmtName(curStmt),
@@ -228,7 +241,7 @@ class Fuwa {
 		}
 		else if (curStmt.getName() == 'SGoto')
 		{
-			curBlock = setScene(curStmt.getParameters()[0]);
+			setCurBlock(setScene(curStmt.getParameters()[0]));
 			ret = {
 				name: 'goto',
 				body: curStmt.getParameters()[0]
@@ -249,7 +262,7 @@ class Fuwa {
 		{
 			ret.choices = [];
 		}
-		if (curStmt.getName() != 'SChoice' && next() != null && next().getName() == 'SChoice')
+		if (ret != null && curStmt.getName() != 'SChoice' && next() != null && next().getName() == 'SChoice')
 		{
 			idx++;
 			curStmt = curBlock[idx];
