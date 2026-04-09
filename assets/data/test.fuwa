@@ -4,11 +4,30 @@ scene "Coffee Shop" {
     You: "Hi, a coffee please."
     Barista: "Nothing here. You need to go to the bar."
     choice "Go to bar" {
-        set places_went 1
-        goto "Bar"
+        set test_variable 1
+        "Are you sure?"
+        choice "Yes, I want to" {
+            "Are you REALLY sure"
+            choice "Yes" {
+                set test_variable 2
+                goto "Bar"
+            }
+            choice "No" {
+                prev
+            }
+            "After thinking about it, I think I'll stay here."
+            goto "Coffee Shop 2"
+            end
+        }
+        choice "Nevermind." {
+            "I'll stay here."
+            goto "Coffee Shop 2"
+        }
+        end
     }
     choice "Don't go to bar" {
         You: "I'm okay here."
+        goto "Coffee Shop 2"
     }
     end
 }
@@ -17,5 +36,10 @@ scene "Bar" {
     Barkeep: "Hey there."
     You: "Hello..."
     You: "I need a drink..."
+    end   
+}
+scene "Coffee Shop 2" {
+    "You stay at the coffee shop..."
+    "I'm hungry..."
     end
 }

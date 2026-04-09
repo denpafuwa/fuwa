@@ -9,26 +9,31 @@ class FuwaParser {
 
 	public static function parse(Tokens:Array<FuwaToken>)
 	{
-        tokens = Tokens;
+		FuwaParser.tokens = Tokens;
+		pos = 0;
         var rawStatements:Array<FuwaStmt> = [];
         while (!isAtEnd()) {
             rawStatements.push(getStatement());
             advance();
             eatNewlines();
         }
+		statements = rawStatements;
         return rawStatements;
     }
 
     static function getStatement():Null<FuwaStmt> {
         return switch (current().type) {
             case KW_GOTO:
-                if (peek(1) != null && peek(1).type == TK_STRING) {
+				if (peek(1) != null && (peek(1).type == TK_STRING || peek(1).type == TK_IDENTIFIER))
+				{
                     advance();
                     return SGoto(current().value);
                 }
                 return null;
             case KW_END:
                 return SEnd;
+			case KW_PREV:
+				return SPrev;
             case KW_SET:
                 if (peek(1) != null && peek(1).type == TK_IDENTIFIER) {
                     advance();
@@ -36,7 +41,7 @@ class FuwaParser {
                     if (peek(1) != null) {
                         advance();
                         switch (current().type) {
-                            case TK_NUMBER, TK_STRING, TK_BOOLEAN, TK_IDENTIFIER:
+							case TK_INT, TK_FLOAT, TK_STRING, TK_BOOLEAN, TK_IDENTIFIER:
                                 return SSet(name, current().value);
                             case _:
                                 return null;

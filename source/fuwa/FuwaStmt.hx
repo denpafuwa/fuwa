@@ -6,5 +6,7 @@ enum FuwaStmt {
     SLine(?name:String, text:String);
     SSet(varName:String, value:Dynamic);
     SGoto(sceneName:String);
+	SFunc(name:String, args:Array<Dynamic>);
+	SPrev;
     SEnd;
 }

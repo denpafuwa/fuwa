@@ -6,13 +6,15 @@ enum FuwaTokenType {
     KW_SET;
     KW_GOTO;
     KW_END;
+	KW_PREV;
 
     TK_IDENTIFIER;
     TK_COLON;
     TK_LBRACE;
     TK_RBRACE;
     TK_STRING;
-    TK_NUMBER;
+	TK_INT;
+	TK_FLOAT;
     TK_BOOLEAN;
     TK_NEWLINE;
     TK_EOF;

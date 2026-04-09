@@ -18,10 +18,12 @@ class FuwaLexer {
 		'choice' => KW_CHOICE,
         'goto' => KW_GOTO,
         'set' => KW_SET,
-        'end' => KW_END
+		'end' => KW_END,
+		'prev' => KW_PREV
     ];
 
     public static function tokenize(Source:String) {
+		pos = 0;
         source = Source;
         var rawTokens:Array<FuwaToken> = [];
         while (!isAtEnd()) {
@@ -52,12 +54,7 @@ class FuwaLexer {
             case '}':
                 token(TK_RBRACE, '}');
             case '\n':
-                token(TK_NEWLINE, '\n');
-            case '.':
-                if (isDigit(peek(1))) {
-                    scanNumber();
-                }
-                null;
+				token(TK_NEWLINE, '\n');
             case '"':
                 scanString();
             case ' ', '\t', '\r':
@@ -76,12 +73,18 @@ class FuwaLexer {
     static function scanNumber() {
         var str = new StringBuf();
         str.add(current());
+		var isFloat = false;
         while ((isDigit(peek(1)) || peek(1) == '.') && !isAtEnd()) {
+			if (peek(1) == '.')
+				isFloat = true;
             advance();
             str.add(current());
         }
 
-        return token(TK_NUMBER, Std.parseFloat(str.toString()));
+		if (!isFloat)
+			return token(TK_INT, Std.parseInt(str.toString()));
+		else
+			return token(TK_FLOAT, Std.parseFloat(str.toString()));
     }
 
     static function scanString() {
