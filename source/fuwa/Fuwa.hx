@@ -32,24 +32,29 @@ typedef FuwaEvent =
 class Fuwa {
 
 	public static var vars:Map<String, Dynamic> = [];
+	public static var funcs:Map<String, (Array<Dynamic>) -> Void> = [
+		"test" => function(args:Array<Dynamic>) {
+			trace("Test func", args);
+		}
+	];
 
     var statements:Array<FuwaStmt> = [];
-    public var scenes:Map<String, Array<FuwaStmt>> = [];
+    public var stages:Map<String, Array<FuwaStmt>> = [];
 	public var blocks:Array<FuwaBlock> = [];
 
 	var parentBlock:FuwaParent;
-    public var curScene:Array<FuwaStmt> = [];
+    public var curStage:Array<FuwaStmt> = [];
 	public var curBlock:Array<FuwaStmt> = [];
 	public var idx:Int;
     public var curStmt:FuwaStmt;
 
-	public function new(source:String, startingScene:String)
+	public function new(source:String, startingStage:String)
 	{
 		idx = 0;
         var tokens = FuwaLexer.tokenize(source);
 		statements = FuwaParser.parse(tokens); 
-		initScenes();
-		setScene(startingScene);
+		initStages();
+		setStage(startingStage);
 	}
 
 	public function progress()
@@ -61,9 +66,9 @@ class Fuwa {
 		}
 	}
 
-	public function setScene(name:String)
+	public function setStage(name:String)
 	{
-		setCurBlock(scenes.get(name));
+		setCurBlock(stages.get(name));
 		idx = 0;
 		curStmt = curBlock[idx];
 		parentArr = [];
@@ -78,13 +83,13 @@ class Fuwa {
 	var nestLevel:Int = 0;
 	var parentArr:Array<FuwaParent> = [];
 
-	function initScenes()
+	function initStages()
 	{
 		for (st in statements)
 		{
 			if (st != null && st.getName() == 'SScene')
 			{
-				scenes.set(st.getParameters()[0], st.getParameters()[1]);
+				stages.set(st.getParameters()[0], st.getParameters()[1]);
 			}
 		}
 	}
@@ -200,6 +205,12 @@ class Fuwa {
 				body: curStmt.getParameters()
 			}
 		}
+		else if (curStmt.getName() == 'SFunc') {
+			ret = {
+				name: curStmt.getParameters()[0],
+				body: curStmt.getParameters()[1]
+			}
+		}
 		else if (curStmt.getName() == 'SChoice' && idx == 0)
 		{
 			if (!ignoreChoices)
@@ -241,7 +252,7 @@ class Fuwa {
 		}
 		else if (curStmt.getName() == 'SGoto')
 		{
-			setCurBlock(setScene(curStmt.getParameters()[0]));
+			setCurBlock(setStage(curStmt.getParameters()[0]));
 			ret = {
 				name: 'goto',
 				body: curStmt.getParameters()[0]

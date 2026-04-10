@@ -14,7 +14,7 @@ class FuwaLexer {
     static final NO_WHITESPACE:Bool = true;
 
     static final KEYWORDS:Map<String, FuwaTokenType> = [
-        'scene' => KW_SCENE,
+        'stage' => KW_SCENE,
 		'choice' => KW_CHOICE,
         'goto' => KW_GOTO,
         'set' => KW_SET,
@@ -126,6 +126,8 @@ class FuwaLexer {
             return token(TK_BOOLEAN, res == 'true');
         } else if (KEYWORDS.exists(res)) {
             return token(KEYWORDS.get(res), res);
+        } else if (Fuwa.funcs.exists(res)) {
+            return token(TK_FUNC, res);
         }
 
         return token(TK_IDENTIFIER, res);

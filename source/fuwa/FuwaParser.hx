@@ -96,6 +96,17 @@ class FuwaParser {
 					return null;
 				}
 				return null;
+			// case KW_IF:
+				// var check = (peek(1).type == TK_IDENTIFIER);
+				// return null;
+            case TK_FUNC:
+                var name = current().value;
+                var args:Array<Dynamic> = [];
+                while (peek(1).type != TK_NEWLINE) {
+                    advance();
+                    args.push(current().value);
+                }
+                return SFunc(name, args);
             case TK_STRING:
                     var line = SLine(null, current().value);
                     return line;

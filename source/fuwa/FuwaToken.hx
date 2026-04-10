@@ -7,8 +7,10 @@ enum FuwaTokenType {
     KW_GOTO;
     KW_END;
 	KW_PREV;
+	KW_IF;
 
     TK_IDENTIFIER;
+    TK_FUNC;
 	TK_COMMENT;
     TK_COLON;
     TK_LBRACE;
